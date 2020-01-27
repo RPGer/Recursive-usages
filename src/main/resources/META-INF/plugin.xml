@@ -1,0 +1,22 @@
+<idea-plugin>
+    <id>org.endpointdeps.EndpointDependencies</id>
+    <name>Function endpoints</name>
+    <vendor email="timur.mukhatov@gmail.com" url="http://www.yourcompany.com">YourCompany</vendor>
+
+    <description><![CDATA[
+    Enter short description for your plugin here.<br>
+    <em>most HTML tags may be used</em>
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="Function endpoints" icon="AllIcons.Actions.Refresh" anchor="right" factoryClass="myToolWindow.MyToolWindowFactory"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>
