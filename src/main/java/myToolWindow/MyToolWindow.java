@@ -1,13 +1,13 @@
 package myToolWindow;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.ui.components.JBScrollPane;
+import myToolWindow.Nodes.RouteNode;
+import myToolWindow.Nodes.TestNode;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
 
 public class MyToolWindow {
@@ -15,25 +15,15 @@ public class MyToolWindow {
 
     public MyToolWindow(ToolWindow toolWindow) {
         DefaultMutableTreeNode top =
-                new DefaultMutableTreeNode("The Java Series");
+                new DefaultMutableTreeNode(new RouteNode
+                        ("Root",
+                                "root.html"));
         createNodes(top);
 
         Tree tree = new Tree(top);
 
-        Icon leafIcon = AllIcons.Actions.Back;
-        Icon closedIcon = AllIcons.Actions.Annotate;
-        Icon openIcon = AllIcons.Actions.Checked;
-
-        if (leafIcon != null) {
-            DefaultTreeCellRenderer renderer =
-                    new DefaultTreeCellRenderer();
-            renderer.setLeafIcon(leafIcon);
-            renderer.setClosedIcon(closedIcon);
-            renderer.setOpenIcon(openIcon);
-            tree.setCellRenderer(renderer);
-        }
-
-
+        MyRenderer renderer = new MyRenderer();
+        tree.setCellRenderer(renderer);
 
 
         JBScrollPane treeView = new JBScrollPane(tree);
@@ -50,55 +40,59 @@ public class MyToolWindow {
         DefaultMutableTreeNode category = null;
         DefaultMutableTreeNode book = null;
 
-        category = new DefaultMutableTreeNode("Books for Java Programmers");
+        category = new DefaultMutableTreeNode(new RouteNode
+                ("Books for Java Programmers",
+                        "pp.html"));
         top.add(category);
 
         //original Tutorial
-        book = new DefaultMutableTreeNode(new MyNode
+        book = new DefaultMutableTreeNode(new RouteNode
                 ("The Java Tutorial: A Short Course on the Basics",
                         "tutorial.html"));
         category.add(book);
 
         //Tutorial Continued
-        book = new DefaultMutableTreeNode(new MyNode
+        book = new DefaultMutableTreeNode(new TestNode
                 ("The Java Tutorial Continued: The Rest of the JDK",
                         "tutorialcont.html"));
         category.add(book);
 
         //JFC Swing Tutorial
-        book = new DefaultMutableTreeNode(new MyNode
+        book = new DefaultMutableTreeNode(new RouteNode
                 ("The JFC Swing Tutorial: A Guide to Constructing GUIs",
                         "swingtutorial.html"));
         category.add(book);
 
         //Bloch
-        book = new DefaultMutableTreeNode(new MyNode
+        book = new DefaultMutableTreeNode(new TestNode
                 ("Effective Java Programming Language Guide",
                         "bloch.html"));
         category.add(book);
 
         //Arnold/Gosling
-        book = new DefaultMutableTreeNode(new MyNode
+        book = new DefaultMutableTreeNode(new RouteNode
                 ("The Java Programming Language", "arnold.html"));
         category.add(book);
 
         //Chan
-        book = new DefaultMutableTreeNode(new MyNode
+        book = new DefaultMutableTreeNode(new TestNode
                 ("The Java Developers Almanac",
                         "chan.html"));
         category.add(book);
 
-        category = new DefaultMutableTreeNode("Books for Java Implementers");
+        category = new DefaultMutableTreeNode(new RouteNode
+                ("For Imlementors",
+                        "vm.html"));
         top.add(category);
 
         //VM
-        book = new DefaultMutableTreeNode(new MyNode
+        book = new DefaultMutableTreeNode(new RouteNode
                 ("The Java Virtual Machine Specification",
                         "vm.html"));
         category.add(book);
 
         //Language Spec
-        book = new DefaultMutableTreeNode(new MyNode
+        book = new DefaultMutableTreeNode(new TestNode
                 ("The Java Language Specification",
                         "jls.html"));
         category.add(book);
