@@ -1,5 +1,10 @@
 package myToolWindow;
 
+import com.intellij.ide.DataManager;
+import com.intellij.openapi.actionSystem.DataConstants;
+import com.intellij.openapi.editor.EditorFactory;
+import com.intellij.openapi.editor.event.EditorEventMulticaster;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.ui.components.JBScrollPane;
@@ -30,6 +35,15 @@ public class MyToolWindow {
 
         myToolWindowContent = new JPanel(new BorderLayout());
         myToolWindowContent.add(treeView);
+
+
+        Project project = (Project) DataManager.getInstance().getDataContext().getData(DataConstants.PROJECT);
+        if (project != null) {
+            EditorEventMulticaster multicaster = EditorFactory.getInstance().getEventMulticaster();
+            multicaster.addCaretListener(new MyCaretListener(), project);
+        }
+
+
     }
 
     public JPanel getContent() {

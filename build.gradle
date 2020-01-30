@@ -18,7 +18,25 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version '2019.3.2'
+    def ideaVersion = 'IU-2019.1'
+    def phpPluginVersion = '191.6183.95'
+
+    version ideaVersion
+
+    def versionParts = ideaVersion.replace('IU-', '').split('\\.')
+    if ((Integer.parseInt(versionParts[0]) == 2019 && Integer.parseInt(versionParts[1]) >= 2) || Integer.parseInt(versionParts[0]) > 2019) {
+        /* since 2019.2 Java is a separate plugin, hence we have to specify it implicitly */
+        plugins = [
+                'java',
+                //'com.jetbrains.php:${phpPluginVersion}'
+                'com.jetbrains.php:191.6183.95'
+        ]
+    } else {
+        plugins = [
+                //'com.jetbrains.php:${phpPluginVersion}'
+                'com.jetbrains.php:191.6183.95'
+        ]
+    }
 }
 patchPluginXml {
     changeNotes """

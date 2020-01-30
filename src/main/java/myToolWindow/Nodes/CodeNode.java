@@ -17,5 +17,5 @@ public abstract class CodeNode {
         return bookName;
     }
 
-    public Icon getIcon() { return AllIcons.Actions.Amend; }
+    public Icon getIcon() { return AllIcons.Actions.Checked; }
 }

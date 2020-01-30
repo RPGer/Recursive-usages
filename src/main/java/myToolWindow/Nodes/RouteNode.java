@@ -11,6 +11,6 @@ public class RouteNode extends CodeNode {
     }
 
     public Icon getIcon() {
-        return AllIcons.Actions.Amend;
+        return AllIcons.Actions.CheckOut;
     }
 }
