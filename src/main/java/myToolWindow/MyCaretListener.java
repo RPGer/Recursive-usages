@@ -1,6 +1,5 @@
 package myToolWindow;
 
-import com.intellij.lang.Language;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.LogicalPosition;
@@ -8,23 +7,19 @@ import com.intellij.openapi.editor.event.CaretEvent;
 import com.intellij.openapi.editor.event.CaretListener;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jetbrains.php.lang.psi.elements.impl.MethodImpl;
-import com.jetbrains.php.lang.psi.elements.impl.MethodReferenceImpl;
-import com.jetbrains.php.lang.psi.stubs.PhpMethodElementType;
 import org.jetbrains.annotations.NotNull;
-import com.jetbrains.php.lang.psi.elements.*;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-
 
 public class MyCaretListener implements CaretListener {
-    public void caretPositionChanged(@NotNull CaretEvent e) {
+    public MyToolWindow mtw;
 
+    public MyCaretListener(MyToolWindow tw){
+        mtw = tw;
+    }
+
+    public void caretPositionChanged(@NotNull CaretEvent e) {
         LogicalPosition position = e.getNewPosition();
         Editor editor = e.getEditor();
         Document document = editor.getDocument();
@@ -32,19 +27,20 @@ public class MyCaretListener implements CaretListener {
 
         Project project = editor.getProject();
         if (project != null) {
+
             PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(document);
             if (file != null) {
 
                 MethodImpl mel = PsiTreeUtil.findElementOfClassAtOffset(file, offset, MethodImpl.class, false);
                 if (mel != null){
-                    System.err.println(mel.getName());
+                    mtw.generateUsageTree(mel);
                 }
             }
         }
-
     }
 
-    private void test(){
+
+//    private void test(){
 //        final List<PsiFile> psiRoots = file.getViewProvider().getAllFiles();
 //        for (PsiElement root : psiRoots) {
 ////                    if (root.getLanguage() == Language.findLanguageByID("PHP")) {
@@ -70,21 +66,21 @@ public class MyCaretListener implements CaretListener {
 ////                    Function el = PsiTreeUtil.findElementOfClassAtOffset(file, offset, Function.class, false);
 //
 //        }
-    }
+//    }
 
-    @Nullable
-    private PsiElement findParentByType(@NotNull PsiElement element, String className) {
-        if (element.getClass().getName().equals(className)){
-            return element;
-        } else {
-            PsiElement parent = element.getParent();
-            if (parent != null) {
-                return findParentByType(parent, className);
-            } else {
-                return null;
-            }
-        }
-    }
+//    @Nullable
+//    private PsiElement findParentByType(@NotNull PsiElement element, String className) {
+//        if (element.getClass().getName().equals(className)){
+//            return element;
+//        } else {
+//            PsiElement parent = element.getParent();
+//            if (parent != null) {
+//                return findParentByType(parent, className);
+//            } else {
+//                return null;
+//            }
+//        }
+//    }
 
     public void caretAdded(@NotNull CaretEvent event) { }
 

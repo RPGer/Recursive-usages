@@ -8,6 +8,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.ui.components.JBScrollPane;
+import com.jetbrains.php.lang.psi.elements.impl.MethodImpl;
+import myToolWindow.Nodes.MethodNode;
 import myToolWindow.Nodes.RouteNode;
 import myToolWindow.Nodes.TestNode;
 
@@ -17,33 +19,36 @@ import java.awt.*;
 
 public class MyToolWindow {
     private JPanel myToolWindowContent;
+    private MyRenderer renderer;
 
-    public MyToolWindow(ToolWindow toolWindow) {
-        DefaultMutableTreeNode top =
-                new DefaultMutableTreeNode(new RouteNode
-                        ("Root",
-                                "root.html"));
-        createNodes(top);
+    public MyToolWindow(Project project) {
+        renderer = new MyRenderer();
+        myToolWindowContent = new JPanel(new BorderLayout());
 
+        //Project project = (Project) DataManager.getInstance().getDataContext().getData(DataConstants.PROJECT);
+        if (project != null) {
+            EditorEventMulticaster multicaster = EditorFactory.getInstance().getEventMulticaster();
+            multicaster.addCaretListener(new MyCaretListener(this), project);
+        }
+    }
+
+    public void generateUsageTree(MethodImpl element){
+        MethodNode methodNode = new MethodNode(element.getName(), "test");
+
+        DefaultMutableTreeNode top = new DefaultMutableTreeNode(methodNode);
+
+        renderTree(top);
+    }
+
+    public void renderTree(DefaultMutableTreeNode top){
         Tree tree = new Tree(top);
 
-        MyRenderer renderer = new MyRenderer();
         tree.setCellRenderer(renderer);
-
 
         JBScrollPane treeView = new JBScrollPane(tree);
 
-        myToolWindowContent = new JPanel(new BorderLayout());
+        myToolWindowContent.removeAll();
         myToolWindowContent.add(treeView);
-
-
-        Project project = (Project) DataManager.getInstance().getDataContext().getData(DataConstants.PROJECT);
-        if (project != null) {
-            EditorEventMulticaster multicaster = EditorFactory.getInstance().getEventMulticaster();
-            multicaster.addCaretListener(new MyCaretListener(), project);
-        }
-
-
     }
 
     public JPanel getContent() {
