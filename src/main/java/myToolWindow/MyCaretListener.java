@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 public class MyCaretListener implements CaretListener {
     public MyToolWindow mtw;
 
-    public MyCaretListener(MyToolWindow tw){
+    public MyCaretListener(MyToolWindow tw) {
         mtw = tw;
     }
 
@@ -32,7 +32,7 @@ public class MyCaretListener implements CaretListener {
             if (file != null) {
 
                 MethodImpl mel = PsiTreeUtil.findElementOfClassAtOffset(file, offset, MethodImpl.class, false);
-                if (mel != null){
+                if (mel != null) {
                     mtw.createAndRenderTree(mel);
                 }
             }
@@ -82,7 +82,9 @@ public class MyCaretListener implements CaretListener {
 //        }
 //    }
 
-    public void caretAdded(@NotNull CaretEvent event) { }
+    public void caretAdded(@NotNull CaretEvent event) {
+    }
 
-    public void caretRemoved(@NotNull CaretEvent event) { }
+    public void caretRemoved(@NotNull CaretEvent event) {
+    }
 }

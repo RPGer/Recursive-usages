@@ -4,7 +4,6 @@ import com.intellij.icons.AllIcons;
 import com.jetbrains.php.lang.psi.elements.impl.MethodImpl;
 
 import javax.swing.*;
-import java.util.List;
 
 public abstract class CodeNode {
     private MethodImpl element;
@@ -17,7 +16,11 @@ public abstract class CodeNode {
         return element.getName();
     }
 
-    public Icon getIcon() { return AllIcons.Actions.Checked; }
+    public Icon getIcon() {
+        return AllIcons.Actions.Checked;
+    }
 
-    public MethodImpl getMethodImpl() { return element; }
+    public MethodImpl getMethodImpl() {
+        return element;
+    }
 }
