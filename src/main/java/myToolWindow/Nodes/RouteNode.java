@@ -1,13 +1,14 @@
 package myToolWindow.Nodes;
 
 import com.intellij.icons.AllIcons;
+import com.jetbrains.php.lang.psi.elements.impl.MethodImpl;
 
 import javax.swing.*;
 
 public class RouteNode extends CodeNode {
 
-    public RouteNode(String book, String filename) {
-        super(book, filename);
+    public RouteNode(MethodImpl e) {
+        super(e);
     }
 
     public Icon getIcon() {

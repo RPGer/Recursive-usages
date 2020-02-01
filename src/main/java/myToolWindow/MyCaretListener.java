@@ -33,7 +33,7 @@ public class MyCaretListener implements CaretListener {
 
                 MethodImpl mel = PsiTreeUtil.findElementOfClassAtOffset(file, offset, MethodImpl.class, false);
                 if (mel != null){
-                    mtw.generateUsageTree(mel);
+                    mtw.createAndRenderTree(mel);
                 }
             }
         }
