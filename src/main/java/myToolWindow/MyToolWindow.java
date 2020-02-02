@@ -113,6 +113,7 @@ public class MyToolWindow {
                 MethodImpl methodImpl = mn.getMethodImpl();
 
                 PsiNavigateUtil.navigate(methodImpl);
+                // Get focus back
             }
         });
 

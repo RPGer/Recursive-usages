@@ -1,29 +1,23 @@
 package myToolWindow;
 
+import com.intellij.ide.util.treeView.NodeRenderer;
+import com.intellij.ui.SimpleTextAttributes;
+import com.intellij.util.ui.tree.TreeUtil;
 import myToolWindow.Nodes.CodeNode;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import java.awt.*;
 
-public class MyRenderer extends DefaultTreeCellRenderer {
-    public Component getTreeCellRendererComponent(
-            JTree tree,
-            Object value,
-            boolean sel,
-            boolean expanded,
-            boolean leaf,
-            int row,
-            boolean hasFocus) {
+public class MyRenderer extends NodeRenderer {
 
-        super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+    @Override
+    public void customizeCellRenderer(@NotNull JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+        CodeNode node = (CodeNode)TreeUtil.getUserObject(value);
+        if (node != null) {
+            setIcon(fixIconIfNeeded(node.getIcon(), selected, hasFocus));
 
-        DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) value;
-
-        CodeNode node = (CodeNode) treeNode.getUserObject();
-        setIcon(node.getIcon());
-
-        return this;
+            append(node.getMethodName(), SimpleTextAttributes.REGULAR_ATTRIBUTES, true);
+            append(" <- " + node.getFileName(), SimpleTextAttributes.GRAYED_ATTRIBUTES, false);
+        }
     }
 }
