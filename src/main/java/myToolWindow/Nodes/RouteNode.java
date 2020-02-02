@@ -5,13 +5,22 @@ import com.jetbrains.php.lang.psi.elements.impl.MethodImpl;
 
 import javax.swing.*;
 
-public class RouteNode extends CodeNode {
+public class RouteNode implements CodeNode {
+    MethodImpl element = null;
 
     public RouteNode(MethodImpl e) {
-        super(e);
+        this.element = e;
     }
 
     public Icon getIcon() {
-        return AllIcons.Actions.CheckOut;
+        return AllIcons.Nodes.Enum;
+    }
+
+    public String toString() {
+        return this.element.getName() + " <- " + this.element.getOriginalElement().getContainingFile().getName();
+    }
+
+    public MethodImpl getMethodImpl() {
+        return this.element;
     }
 }

@@ -15,7 +15,8 @@ import com.intellij.util.PsiNavigateUtil;
 import com.intellij.util.Query;
 import com.jetbrains.php.lang.psi.elements.impl.MethodImpl;
 import myToolWindow.Actions.FindUsagesAction;
-import myToolWindow.Nodes.MethodNode;
+import myToolWindow.Nodes.CodeNode;
+import myToolWindow.Nodes.CodeNodeFactory;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -49,8 +50,8 @@ public class MyToolWindow {
     }
 
     public void createAndRenderTree(MethodImpl element) {
-        MethodNode methodNode = new MethodNode(element);
-        DefaultMutableTreeNode topElement = new DefaultMutableTreeNode(methodNode);
+        CodeNode codeNode = CodeNodeFactory.createNode(element);
+        DefaultMutableTreeNode topElement = new DefaultMutableTreeNode(codeNode);
 
         DefaultMutableTreeNode tree = generateUsageTree(element, topElement);
 
@@ -67,7 +68,7 @@ public class MyToolWindow {
 
             MethodImpl mel = PsiTreeUtil.findElementOfClassAtOffset(file, offset, MethodImpl.class, false);
             if (mel != null) {
-                MethodNode caller = new MethodNode(mel);
+                CodeNode caller = CodeNodeFactory.createNode(mel);
                 DefaultMutableTreeNode callerNode = new DefaultMutableTreeNode(caller);
 
                 if (!elementExist(root, mel)) {
@@ -87,7 +88,7 @@ public class MyToolWindow {
         while (e.hasMoreElements()) {
             DefaultMutableTreeNode currentElement = (DefaultMutableTreeNode) e.nextElement();
 
-            MethodNode node = (MethodNode) currentElement.getUserObject();
+            CodeNode node = (CodeNode) currentElement.getUserObject();
             MethodImpl callerPsiElement = node.getMethodImpl();
             if (mel.equals(callerPsiElement)) {
                 return true;
@@ -108,7 +109,7 @@ public class MyToolWindow {
                 TreePath tp = treeSelectionEvent.getPath();
                 DefaultMutableTreeNode selected = (DefaultMutableTreeNode) tp.getLastPathComponent();
 
-                MethodNode mn = (MethodNode) selected.getUserObject();
+                CodeNode mn = (CodeNode) selected.getUserObject();
                 MethodImpl methodImpl = mn.getMethodImpl();
 
                 PsiNavigateUtil.navigate(methodImpl);

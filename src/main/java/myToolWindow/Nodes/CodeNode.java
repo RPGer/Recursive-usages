@@ -1,26 +1,13 @@
 package myToolWindow.Nodes;
 
-import com.intellij.icons.AllIcons;
 import com.jetbrains.php.lang.psi.elements.impl.MethodImpl;
 
 import javax.swing.*;
 
-public abstract class CodeNode {
-    private MethodImpl element;
+public interface CodeNode {
+    String toString();
 
-    public CodeNode(MethodImpl e) {
-        element = e;
-    }
+    Icon getIcon();
 
-    public String toString() {
-        return element.getName();
-    }
-
-    public Icon getIcon() {
-        return AllIcons.Actions.Checked;
-    }
-
-    public MethodImpl getMethodImpl() {
-        return element;
-    }
+    MethodImpl getMethodImpl();
 }
