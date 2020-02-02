@@ -19,5 +19,9 @@
 
     <actions>
         <!-- Add your actions here -->
+        <action id="myToolWindow.Actions.FindUsagesAction" class="myToolWindow.Actions.FindUsagesAction"
+                text="Find Dependencies">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl meta BACK_QUOTE"/>
+        </action>
     </actions>
 </idea-plugin>
