@@ -12,6 +12,6 @@ public class MethodNode extends CodeNode {
     }
 
     public Icon getIcon() {
-        return AllIcons.Actions.ModuleDirectory;
+        return AllIcons.Nodes.Method;
     }
 }

@@ -1,17 +1,9 @@
 package myToolWindow;
 
 import com.intellij.icons.AllIcons;
-import com.intellij.ide.CommonActionsManager;
-import com.intellij.ide.dnd.aware.DnDAwareTree;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionPlaces;
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.intellij.openapi.editor.*;
-import com.intellij.openapi.editor.event.EditorEventMulticaster;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ex.ToolWindowEx;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
@@ -33,39 +25,27 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.util.Enumeration;
 
 public class MyToolWindow {
     private JPanel generalPanel;
-//    private JPanel topPanel;
     private JPanel bottomPanel;
     private MyRenderer renderer;
-//    private Project project;
-    private ToolWindow toolWindow;
 
-    public MyToolWindow(Project p, ToolWindow tw) {
-//        project = p;
-        toolWindow = tw;
+    public MyToolWindow() {
         renderer = new MyRenderer();
         generalPanel = new JPanel(new BorderLayout());
 
-
         DefaultActionGroup result = new DefaultActionGroup();
-        result.add(new FindUsagesAction(this, AllIcons.Actions.Resume));
-        JComponent c = ActionManager.getInstance().createActionToolbar(ActionPlaces.STRUCTURE_VIEW_TOOLBAR, result, true).getComponent();
-
-//        generalPanel.
-        generalPanel.add(c, BorderLayout.NORTH);
-
+        result.add(new FindUsagesAction(this, AllIcons.RunConfigurations.TestState.Run));
+        JComponent toolbarPanel = ActionManager.getInstance().createActionToolbar(ActionPlaces.STRUCTURE_VIEW_TOOLBAR, result, true).getComponent();
 
         bottomPanel = new JPanel(new BorderLayout());
 
-//        generalPanel.setLayout(new BoxLayout(generalPanel, BoxLayout.Y_AXIS));
-//        generalPanel.add(topPanel, BorderLayout.NORTH);
+        generalPanel.add(toolbarPanel, BorderLayout.NORTH);
         generalPanel.add(bottomPanel, BorderLayout.CENTER);
 
-
+        renderTree(null);
     }
 
     public void createAndRenderTree(MethodImpl element) {
