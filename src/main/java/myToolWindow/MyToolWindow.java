@@ -4,6 +4,7 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
@@ -11,7 +12,6 @@ import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.ui.components.JBScrollPane;
-import com.intellij.util.PsiNavigateUtil;
 import com.intellij.util.Query;
 import com.jetbrains.php.lang.psi.elements.impl.MethodImpl;
 import myToolWindow.Actions.FindUsagesAction;
@@ -112,8 +112,9 @@ public class MyToolWindow {
                 CodeNode mn = (CodeNode) selected.getUserObject();
                 MethodImpl methodImpl = mn.getMethodImpl();
 
-                PsiNavigateUtil.navigate(methodImpl);
-                // Get focus back
+                final PsiElement navigationElement = methodImpl.getNavigationElement();
+                Navigatable navigatable = (Navigatable) navigationElement;
+                navigatable.navigate(false);
             }
         });
 

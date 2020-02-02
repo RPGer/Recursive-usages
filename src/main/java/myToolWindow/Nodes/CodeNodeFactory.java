@@ -12,7 +12,7 @@ public class CodeNodeFactory {
         if (isRoute(mel)) {
             return new CodeNode(new RouteNode(), mel);
         } else if (isTest(mel)) {
-            return new CodeNode(new TestNode(),mel);
+            return new CodeNode(new TestNode(), mel);
         }
         return new CodeNode(new MethodNode(), mel);
     }

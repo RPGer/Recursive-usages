@@ -8,7 +8,7 @@ public class CodeNode implements HasIcon {
     private HasIcon wrappee;
     MethodImpl element = null;
 
-    public CodeNode(HasIcon cn, MethodImpl e){
+    public CodeNode(HasIcon cn, MethodImpl e) {
         this.wrappee = cn;
         this.element = e;
     }
