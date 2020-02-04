@@ -6,9 +6,13 @@
 
     <idea-version since-build="192.5728.98" />
 
-    <description>
-    This plugin helps to find recursively all usages of given function.
-    </description>
+    <description><![CDATA[
+    Replaced by description.html .....................
+    ]]></description>
+
+    <change-notes><![CDATA[
+    Replaced by change-notes.html ....................
+    ]]></change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->

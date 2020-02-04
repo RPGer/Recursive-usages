@@ -14,6 +14,8 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
+def htmlFixer = { htmlFile -> file(htmlFile).text.replace('<html>', '').replace('</html>', '') }
+
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     version ideaVersion
@@ -35,8 +37,10 @@ intellij {
         ]
     }
 }
+
 patchPluginXml {
-    changeNotes """
-      First version released
-      """
+    sinceBuild        = "162.1889"
+    untilBuild        = ""
+    changeNotes       = htmlFixer('src/main/resources/META-INF/change-notes.html')
+    pluginDescription = htmlFixer('src/main/resources/META-INF/description.html')
 }
