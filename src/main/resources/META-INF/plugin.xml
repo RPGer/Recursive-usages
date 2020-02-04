@@ -1,7 +1,8 @@
 <idea-plugin>
     <id>org.endpointdeps.EndpointDependencies</id>
-    <name>Function endpoints</name>
+    <name>Recursive usages</name>
     <vendor email="timur.mukhatov@gmail.com" url="https://www.linkedin.com/in/timur-mukhatov/">Timur Mukhatov</vendor>
+    <version>1.0</version>
 
     <idea-version since-build="192.5728.98" />
 
@@ -15,7 +16,7 @@
     <depends>com.jetbrains.php</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="Find dependencies" icon="AllIcons.Actions.Refresh" anchor="right" factoryClass="myToolWindow.MyToolWindowFactory"/>
+        <toolWindow id="Recursive usages" icon="AllIcons.Actions.Refresh" anchor="right" factoryClass="myToolWindow.MyToolWindowFactory"/>
     </extensions>
 
     <actions>

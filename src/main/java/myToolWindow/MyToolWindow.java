@@ -4,6 +4,7 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -30,8 +31,10 @@ public class MyToolWindow {
     private final JPanel generalPanel;
     private final JPanel bottomPanel;
     private final MyRenderer renderer;
+    private final ToolWindow toolWindow;
 
-    public MyToolWindow() {
+    public MyToolWindow(ToolWindow tw) {
+        toolWindow = tw;
         renderer = new MyRenderer();
         generalPanel = new JPanel(new BorderLayout());
 
@@ -44,16 +47,24 @@ public class MyToolWindow {
         generalPanel.add(toolbarPanel, BorderLayout.NORTH);
         generalPanel.add(bottomPanel, BorderLayout.CENTER);
 
-        renderTree(null);
+        bottomPanel.removeAll();
+        bottomPanel.add(new JBScrollPane());
     }
 
     public void createAndRenderTree(MethodImpl element) {
         CodeNode codeNode = CodeNodeFactory.createNode(element);
         DefaultMutableTreeNode topElement = new DefaultMutableTreeNode(codeNode);
 
-        DefaultMutableTreeNode tree = generateUsageTree(element, topElement);
+        DefaultMutableTreeNode usageTree = generateUsageTree(element, topElement);
 
-        renderTree(tree);
+        Tree tree = this.configureTree(usageTree);
+
+        JBScrollPane treeView = new JBScrollPane(tree);
+
+        bottomPanel.removeAll();
+        bottomPanel.add(treeView);
+
+        toolWindow.getComponent().updateUI();
     }
 
     public DefaultMutableTreeNode generateUsageTree(MethodImpl element, DefaultMutableTreeNode root) {
@@ -96,7 +107,7 @@ public class MyToolWindow {
         return false;
     }
 
-    public void renderTree(DefaultMutableTreeNode top) {
+    public Tree configureTree(DefaultMutableTreeNode top) {
         Tree tree = new Tree(top);
 
         tree.setCellRenderer(renderer);
@@ -113,10 +124,7 @@ public class MyToolWindow {
             navigatable.navigate(false);
         });
 
-        JBScrollPane treeView = new JBScrollPane(tree);
-
-        bottomPanel.removeAll();
-        bottomPanel.add(treeView);
+        return tree;
     }
 
     public JPanel getContent() {

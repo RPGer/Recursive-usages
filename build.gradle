@@ -20,10 +20,20 @@ intellij {
 
     updateSinceUntilBuild = false // disable building for each major version
 
-    plugins = [
-            'java',
-            'com.jetbrains.php:' + phpPluginVersion
-    ]
+    def versionParts = ideaVersion.replace('IU-', '').split('\\.')
+    if ((Integer.parseInt(versionParts[0]) == 2019 && Integer.parseInt(versionParts[1]) >= 2) || Integer.parseInt(versionParts[0]) > 2019) {
+        /* since 2019.2 Java is a separate plugin, hence we have to specify it implicitly */
+        plugins = [
+                'java',
+                "com.jetbrains.php:${phpPluginVersion}",
+                'properties',
+        ]
+    } else {
+        plugins = [
+                "com.jetbrains.php:${phpPluginVersion}",
+                'properties',
+        ]
+    }
 }
 patchPluginXml {
     changeNotes """
