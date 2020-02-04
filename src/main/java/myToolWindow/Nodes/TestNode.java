@@ -10,6 +10,6 @@ public class TestNode implements HasIcon {
 
     @Override
     public Icon getIcon() {
-        return AllIcons.Scope.Tests;
+        return AllIcons.Actions.StartDebugger;
     }
 }

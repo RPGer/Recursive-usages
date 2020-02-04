@@ -14,7 +14,7 @@ public class MyRenderer extends NodeRenderer {
     public void customizeCellRenderer(@NotNull JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
         CodeNode node = (CodeNode) TreeUtil.getUserObject(value);
         if (node != null) {
-            setIcon(fixIconIfNeeded(node.getIcon(), selected, hasFocus));
+            setIcon(super.fixIconIfNeeded(node.getIcon(), selected, hasFocus));
 
             append(node.getMethodName(), SimpleTextAttributes.REGULAR_ATTRIBUTES, true);
             append(" <- " + node.getFileName(), SimpleTextAttributes.GRAYED_ATTRIBUTES, false);
