@@ -5,8 +5,8 @@ import com.jetbrains.php.lang.psi.elements.impl.MethodImpl;
 import javax.swing.*;
 
 public class CodeNode implements HasIcon {
-    private HasIcon wrappee;
-    MethodImpl element = null;
+    private final HasIcon wrappee;
+    private final MethodImpl element;
 
     public CodeNode(HasIcon cn, MethodImpl e) {
         this.wrappee = cn;

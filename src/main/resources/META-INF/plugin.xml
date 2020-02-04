@@ -1,12 +1,13 @@
 <idea-plugin>
     <id>org.endpointdeps.EndpointDependencies</id>
     <name>Function endpoints</name>
-    <vendor email="timur.mukhatov@gmail.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <vendor email="timur.mukhatov@gmail.com" url="https://www.linkedin.com/in/timur-mukhatov/">Timur Mukhatov</vendor>
 
-    <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
-    ]]></description>
+    <idea-version since-build="192.5728.98" />
+
+    <description>
+    This plugin helps to find recursively all usages of given function.
+    </description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
@@ -14,7 +15,7 @@
     <depends>com.jetbrains.php</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="Function endpoints" icon="AllIcons.Actions.Refresh" anchor="right" factoryClass="myToolWindow.MyToolWindowFactory"/>
+        <toolWindow id="Find dependencies" icon="AllIcons.Actions.Refresh" anchor="right" factoryClass="myToolWindow.MyToolWindowFactory"/>
     </extensions>
 
     <actions>

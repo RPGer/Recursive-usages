@@ -1,9 +1,8 @@
 package myToolWindow.Actions;
 
-import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataConstants;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
@@ -28,7 +27,7 @@ public class FindUsagesAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        Editor editor = (Editor) DataManager.getInstance().getDataContext().getData(DataConstants.EDITOR);
+        Editor editor = e.getData(CommonDataKeys.EDITOR);
 
         if (editor != null) {
             CaretModel caretModel = editor.getCaretModel();

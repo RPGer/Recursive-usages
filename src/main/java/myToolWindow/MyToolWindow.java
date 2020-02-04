@@ -19,8 +19,6 @@ import myToolWindow.Nodes.CodeNode;
 import myToolWindow.Nodes.CodeNodeFactory;
 
 import javax.swing.*;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
@@ -29,9 +27,9 @@ import java.awt.*;
 import java.util.Enumeration;
 
 public class MyToolWindow {
-    private JPanel generalPanel;
-    private JPanel bottomPanel;
-    private MyRenderer renderer;
+    private final JPanel generalPanel;
+    private final JPanel bottomPanel;
+    private final MyRenderer renderer;
 
     public MyToolWindow() {
         renderer = new MyRenderer();
@@ -103,19 +101,16 @@ public class MyToolWindow {
 
         tree.setCellRenderer(renderer);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-        tree.addTreeSelectionListener(new TreeSelectionListener() {
-            @Override
-            public void valueChanged(TreeSelectionEvent treeSelectionEvent) {
-                TreePath tp = treeSelectionEvent.getPath();
-                DefaultMutableTreeNode selected = (DefaultMutableTreeNode) tp.getLastPathComponent();
+        tree.addTreeSelectionListener(treeSelectionEvent -> {
+            TreePath tp = treeSelectionEvent.getPath();
+            DefaultMutableTreeNode selected = (DefaultMutableTreeNode) tp.getLastPathComponent();
 
-                CodeNode mn = (CodeNode) selected.getUserObject();
-                MethodImpl methodImpl = mn.getMethodImpl();
+            CodeNode mn = (CodeNode) selected.getUserObject();
+            MethodImpl methodImpl = mn.getMethodImpl();
 
-                final PsiElement navigationElement = methodImpl.getNavigationElement();
-                Navigatable navigatable = (Navigatable) navigationElement;
-                navigatable.navigate(false);
-            }
+            final PsiElement navigationElement = methodImpl.getNavigationElement();
+            Navigatable navigatable = (Navigatable) navigationElement;
+            navigatable.navigate(false);
         });
 
         JBScrollPane treeView = new JBScrollPane(tree);
