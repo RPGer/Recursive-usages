@@ -21,17 +21,17 @@ import myToolWindow.Nodes.CodeNodeFactory;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
-import java.util.Enumeration;
+import java.util.HashSet;
 
 public class MyToolWindow {
     private final JPanel generalPanel;
     private final JPanel bottomPanel;
     private final MyRenderer renderer;
     private final ToolWindow toolWindow;
+    private HashSet<MethodImpl> methodSet = new HashSet<>();
 
     public MyToolWindow(ToolWindow tw) {
         toolWindow = tw;
@@ -53,6 +53,7 @@ public class MyToolWindow {
 
     public void createAndRenderTree(MethodImpl element) {
         CodeNode codeNode = CodeNodeFactory.createNode(element);
+        methodSet.add(element);
         DefaultMutableTreeNode topElement = new DefaultMutableTreeNode(codeNode);
 
         DefaultMutableTreeNode usageTree = generateUsageTree(element, topElement);
@@ -76,35 +77,21 @@ public class MyToolWindow {
             final int offset = el.getTextOffset();
 
             MethodImpl mel = PsiTreeUtil.findElementOfClassAtOffset(file, offset, MethodImpl.class, false);
-            if (mel != null) {
+
+            if (mel != null && !methodSet.contains(mel)) {
                 CodeNode caller = CodeNodeFactory.createNode(mel);
                 DefaultMutableTreeNode callerNode = new DefaultMutableTreeNode(caller);
 
-                if (!elementExist(root, mel)) {
-                    root.add(callerNode);
-                }
+                root.add(callerNode);
+                methodSet.add(mel);
 
                 generateUsageTree(mel, callerNode);
+            } else {
+                // Recursive function found
             }
         }
 
         return root;
-    }
-
-    private Boolean elementExist(DefaultMutableTreeNode root, MethodImpl mel) {
-        Enumeration<TreeNode> e = root.children();
-
-        while (e.hasMoreElements()) {
-            DefaultMutableTreeNode currentElement = (DefaultMutableTreeNode) e.nextElement();
-
-            CodeNode node = (CodeNode) currentElement.getUserObject();
-            MethodImpl callerPsiElement = node.getMethodImpl();
-            if (mel.equals(callerPsiElement)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public Tree configureTree(DefaultMutableTreeNode top) {
