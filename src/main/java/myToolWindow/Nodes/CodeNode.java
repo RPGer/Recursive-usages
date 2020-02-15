@@ -1,5 +1,7 @@
 package myToolWindow.Nodes;
 
+import com.intellij.icons.AllIcons;
+import com.intellij.ui.RowIcon;
 import com.jetbrains.php.lang.psi.elements.impl.MethodImpl;
 
 import javax.swing.*;
@@ -7,6 +9,7 @@ import javax.swing.*;
 public class CodeNode implements HasIcon {
     private final HasIcon wrappee;
     private final MethodImpl element;
+    private boolean isCyclic = false;
 
     public CodeNode(HasIcon cn, MethodImpl e) {
         this.wrappee = cn;
@@ -15,7 +18,15 @@ public class CodeNode implements HasIcon {
 
     @Override
     public Icon getIcon() {
-        return wrappee.getIcon();
+        if (isCyclic){
+            return new RowIcon(wrappee.getIcon(), AllIcons.Gutter.RecursiveMethod);
+        } else {
+            return wrappee.getIcon();
+        }
+    }
+
+    public void setIsCyclic(){
+        isCyclic = true;
     }
 
     public MethodImpl getMethodImpl() {

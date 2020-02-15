@@ -1,5 +1,6 @@
 package myToolWindow.Actions;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -12,16 +13,14 @@ import com.jetbrains.php.lang.psi.elements.impl.MethodImpl;
 import myToolWindow.MyToolWindow;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-
 public class FindUsagesAction extends AnAction {
     public MyToolWindow mtw;
 
     public FindUsagesAction() {
     }
 
-    public FindUsagesAction(MyToolWindow tw, Icon icon) {
-        super(icon);
+    public FindUsagesAction(MyToolWindow tw) {
+        super("Find Recursive Usages", "Find recursive usages", AllIcons.RunConfigurations.TestState.Run);
         mtw = tw;
     }
 
