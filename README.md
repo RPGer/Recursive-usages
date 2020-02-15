@@ -11,4 +11,8 @@ Supports detections for: Symfony routes, PHPUnit tests
 3. ...
 4. PROFIT!
 
+### TODO
+1. Detect yaml and xml Symfony routes
+2. Detect Laravel routes
+
 ### Feel free to provide a feedback or report a bug
