@@ -8,9 +8,9 @@ import java.util.HashSet;
 public class ClassNodeSet {
     final HashSet<ClassNode> set = new HashSet<>();
 
-    public boolean contains(MethodImpl methodImpl){
-        for (ClassNode classNode : set){
-            if (classNode.getElement().equals(methodImpl)){
+    public boolean contains(MethodImpl methodImpl) {
+        for (ClassNode classNode : set) {
+            if (classNode.getElement().equals(methodImpl)) {
                 return true;
             }
         }
@@ -19,9 +19,9 @@ public class ClassNodeSet {
     }
 
     @Nullable
-    public ClassNode find(MethodImpl methodImpl){
-        for (ClassNode classNode : set){
-            if (classNode.getElement().equals(methodImpl)){
+    public ClassNode find(MethodImpl methodImpl) {
+        for (ClassNode classNode : set) {
+            if (classNode.getElement().equals(methodImpl)) {
                 return classNode;
             }
         }
@@ -29,11 +29,11 @@ public class ClassNodeSet {
         return null;
     }
 
-    public void add(ClassNode classNode){
+    public void add(ClassNode classNode) {
         set.add(classNode);
     }
 
-    public void clear(){
+    public void clear() {
         set.clear();
     }
 }

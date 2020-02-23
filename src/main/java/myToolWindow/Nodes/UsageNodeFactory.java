@@ -19,6 +19,9 @@ import myToolWindow.Nodes.Icons.FileNodes.PhpFileNode;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.intellij.testIntegration.TestFinderHelper.isTest;
 
 public class UsageNodeFactory {
@@ -69,14 +72,17 @@ public class UsageNodeFactory {
                 PsiElement resolved = Resolver.resolveReference(mel);
 
                 if (resolved instanceof Method) {
-                    final PhpClass clazz = ((Method) resolved).getContainingClass();
+                    final PhpClass phpClass = ((Method) resolved).getContainingClass();
 
-                    if (clazz != null && clazz.getFQN().equals("\\Illuminate\\Contracts\\Routing\\Registrar")) {
+                    List<String> list = Arrays.asList(
+                            "\\Illuminate\\Contracts\\Routing\\Registrar",
+                            "\\Illuminate\\Support\\Facades\\Route"
+                    );
+
+                    if (phpClass != null && list.contains(phpClass.getFQN())) {
                         return true;
                     }
                 }
-
-                // DETECT THROUGH Route facade
             }
         }
 

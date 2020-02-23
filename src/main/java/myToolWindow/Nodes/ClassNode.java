@@ -20,14 +20,14 @@ public class ClassNode implements UsageNode {
 
     @Override
     public Icon getIcon() {
-        if (isCyclic){
+        if (isCyclic) {
             return new RowIcon(iconContainer.getIcon(), AllIcons.Gutter.RecursiveMethod);
         } else {
             return iconContainer.getIcon();
         }
     }
 
-    public void setIsCyclic(){
+    public void setIsCyclic() {
         isCyclic = true;
     }
 
