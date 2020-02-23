@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.intellij' version '0.4.15'
+    id 'org.jetbrains.intellij' version '0.4.1'
 }
 
 group 'org.endpointdeps'
@@ -40,7 +40,7 @@ intellij {
 }
 
 patchPluginXml {
-    sinceBuild        = "162.1889"
+    sinceBuild        = "172.1909.2"
     untilBuild        = ""
     changeNotes       = htmlFixer('src/main/resources/META-INF/change-notes.html')
     pluginDescription = htmlFixer('src/main/resources/META-INF/description.html')
