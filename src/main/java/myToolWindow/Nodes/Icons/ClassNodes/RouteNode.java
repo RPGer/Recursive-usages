@@ -1,6 +1,7 @@
-package myToolWindow.Nodes;
+package myToolWindow.Nodes.Icons.ClassNodes;
 
 import com.intellij.icons.AllIcons;
+import myToolWindow.Nodes.Icons.HasIcon;
 
 import javax.swing.*;
 

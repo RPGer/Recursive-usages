@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public class ExpandTreeAction extends AnAction {
     public MyToolWindow mtw;
 
+    @SuppressWarnings("unused")
     public ExpandTreeAction() {
     }
 

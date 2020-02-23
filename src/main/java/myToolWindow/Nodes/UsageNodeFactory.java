@@ -7,28 +7,44 @@ import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Query;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.impl.tags.PhpDocTagImpl;
+import com.jetbrains.php.lang.psi.elements.Method;
+import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.impl.MethodImpl;
 import com.jetbrains.php.lang.psi.elements.impl.MethodReferenceImpl;
-import com.jetbrains.php.lang.psi.elements.impl.VariableImpl;
+import myToolWindow.Utils.Resolver;
+import myToolWindow.Nodes.Icons.ClassNodes.MethodNode;
+import myToolWindow.Nodes.Icons.ClassNodes.RouteNode;
+import myToolWindow.Nodes.Icons.ClassNodes.TestNode;
+import myToolWindow.Nodes.Icons.FileNodes.PhpFileNode;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.testIntegration.TestFinderHelper.isTest;
 
-public class CodeNodeFactory {
+public class UsageNodeFactory {
 
-    public static CodeNode createNode(MethodImpl mel) {
+    @NotNull
+    @Contract("_ -> new")
+    public static UsageNode createFileNode(MethodReferenceImpl ref) {
+        return new FileNode(new PhpFileNode(), ref);
+    }
+
+    @NotNull
+    @Contract("_ -> new")
+    public static UsageNode createMethodNode(MethodImpl mel) {
         if (isRoute(mel)) {
-            return new CodeNode(new RouteNode(), mel);
+            return new ClassNode(new RouteNode(), mel);
         } else if (isTest(mel)) {
-            return new CodeNode(new TestNode(), mel);
+            return new ClassNode(new TestNode(), mel);
         }
-        return new CodeNode(new MethodNode(), mel);
+        return new ClassNode(new MethodNode(), mel);
     }
 
     private static boolean isRoute(MethodImpl mel) {
         return isSymfonyRouteDefinedByAnnotation(mel) || isLaravelRoute(mel);
     }
 
-    private static boolean isSymfonyRouteDefinedByAnnotation(MethodImpl mel) {
+    private static boolean isSymfonyRouteDefinedByAnnotation(@NotNull MethodImpl mel) {
         PsiElement[] annotations = mel.getNode().getTreePrev().getTreePrev().getPsi().getChildren();
         for (PsiElement annotation : annotations) {
             if (annotation instanceof PhpDocTagImpl && ((PhpDocTagImpl) annotation).getName().equals("@Route")) {
@@ -50,7 +66,17 @@ public class CodeNodeFactory {
             MethodReferenceImpl mel = PsiTreeUtil.findElementOfClassAtOffset(file, offset, MethodReferenceImpl.class, false);
 
             if (mel != null) {
-                //VariableImpl v = (VariableImpl) el.getFirstChild();
+                PsiElement resolved = Resolver.resolveReference(mel);
+
+                if (resolved instanceof Method) {
+                    final PhpClass clazz = ((Method) resolved).getContainingClass();
+
+                    if (clazz != null && clazz.getFQN().equals("\\Illuminate\\Contracts\\Routing\\Registrar")) {
+                        return true;
+                    }
+                }
+
+                // DETECT THROUGH Route facade
             }
         }
 

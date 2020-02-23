@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.pom.Navigatable;
+import com.intellij.psi.NavigatablePsiElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
@@ -14,12 +15,14 @@ import com.intellij.ui.treeStructure.Tree;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.Query;
 import com.jetbrains.php.lang.psi.elements.impl.MethodImpl;
+import com.jetbrains.php.lang.psi.elements.impl.MethodReferenceImpl;
 import myToolWindow.Actions.CollapseTreeAction;
 import myToolWindow.Actions.ExpandTreeAction;
 import myToolWindow.Actions.FindUsagesAction;
-import myToolWindow.Nodes.CodeNode;
-import myToolWindow.Nodes.CodeNodeFactory;
-import myToolWindow.Nodes.CodeNodeSet;
+import myToolWindow.Nodes.ClassNode;
+import myToolWindow.Nodes.ClassNodeSet;
+import myToolWindow.Nodes.UsageNodeFactory;
+import myToolWindow.Nodes.UsageNode;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -27,14 +30,13 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
-import java.util.HashSet;
 
 public class MyToolWindow {
     private final JPanel generalPanel;
     private final JPanel bottomPanel;
     private final MyRenderer renderer;
     private final ToolWindow toolWindow;
-    private CodeNodeSet codeNodeSet = new CodeNodeSet();
+    private final ClassNodeSet classNodeSet = new ClassNodeSet();
     public Tree tree;
 
     public MyToolWindow(ToolWindow tw) {
@@ -64,10 +66,10 @@ public class MyToolWindow {
     }
 
     public void createAndRenderTree(MethodImpl element) {
-        codeNodeSet.clear();
-        CodeNode codeNode = CodeNodeFactory.createNode(element);
-        codeNodeSet.add(codeNode);
-        DefaultMutableTreeNode topElement = new DefaultMutableTreeNode(codeNode);
+        classNodeSet.clear();
+        ClassNode classNode = (ClassNode) UsageNodeFactory.createMethodNode(element);
+        classNodeSet.add(classNode);
+        DefaultMutableTreeNode topElement = new DefaultMutableTreeNode(classNode);
 
         DefaultMutableTreeNode usageTree = generateUsageTree(element, topElement);
 
@@ -91,19 +93,28 @@ public class MyToolWindow {
 
             MethodImpl mel = PsiTreeUtil.findElementOfClassAtOffset(file, offset, MethodImpl.class, false);
 
-            if (mel != null && !codeNodeSet.contains(mel)) {
-                CodeNode caller = CodeNodeFactory.createNode(mel);
+            if (mel != null) {
+                if (!classNodeSet.contains(mel)) {
+                    ClassNode caller = (ClassNode) UsageNodeFactory.createMethodNode(mel);
+                    DefaultMutableTreeNode callerNode = new DefaultMutableTreeNode(caller);
+
+                    root.add(callerNode);
+                    classNodeSet.add(caller);
+
+                    generateUsageTree(mel, callerNode);
+                } else {
+                    ClassNode classNode = classNodeSet.find(element);
+                    if (classNode != null) {
+                        classNode.setIsCyclic();
+                    }
+                }
+            } else {
+                MethodReferenceImpl mer = PsiTreeUtil.findElementOfClassAtOffset(file, offset, MethodReferenceImpl.class, false);
+
+                UsageNode caller = UsageNodeFactory.createFileNode(mer);
                 DefaultMutableTreeNode callerNode = new DefaultMutableTreeNode(caller);
 
                 root.add(callerNode);
-                codeNodeSet.add(caller);
-
-                generateUsageTree(mel, callerNode);
-            } else {
-                CodeNode codeNode = codeNodeSet.find(element);
-                if (codeNode != null) {
-                    codeNode.setIsCyclic();
-                }
             }
         }
 
@@ -119,8 +130,8 @@ public class MyToolWindow {
             TreePath tp = treeSelectionEvent.getPath();
             DefaultMutableTreeNode selected = (DefaultMutableTreeNode) tp.getLastPathComponent();
 
-            CodeNode mn = (CodeNode) selected.getUserObject();
-            MethodImpl methodImpl = mn.getMethodImpl();
+            UsageNode mn = (UsageNode) selected.getUserObject();
+            NavigatablePsiElement methodImpl = mn.getElement();
 
             final PsiElement navigationElement = methodImpl.getNavigationElement();
             Navigatable navigatable = (Navigatable) navigationElement;

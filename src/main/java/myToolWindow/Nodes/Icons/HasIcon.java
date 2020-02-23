@@ -1,4 +1,4 @@
-package myToolWindow.Nodes;
+package myToolWindow.Nodes.Icons;
 
 import javax.swing.*;
 

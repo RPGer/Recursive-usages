@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public class CollapseTreeAction extends AnAction {
     public MyToolWindow mtw;
 
+    @SuppressWarnings("unused")
     public CollapseTreeAction() {
     }
 

@@ -4,7 +4,8 @@
     <vendor email="timur.mukhatov@gmail.com" url="https://www.linkedin.com/in/timur-mukhatov/">Timur Mukhatov</vendor>
     <version>1.1</version>
 
-    <idea-version since-build="162.1889" />
+    <!-- TreeUtil.getUserObject available since 172.1909.2 -->
+    <idea-version since-build="172.1909.2" />
 
     <description><![CDATA[
     Replaced by description.html ...............................................
@@ -26,10 +27,8 @@
     </extensions>
 
     <actions>
-        <!-- Add your actions here -->
-        <action id="myToolWindow.Actions.FindUsagesAction" class="myToolWindow.Actions.FindUsagesAction"
-                text="Find Dependencies">
-            <keyboard-shortcut keymap="$default" first-keystroke="ctrl meta BACK_QUOTE"/>
-        </action>
+        <action id="myToolWindow.Actions.FindUsagesAction" class="myToolWindow.Actions.FindUsagesAction" text="Find Usages"/>
+        <action id="myToolWindow.Actions.ExpandTreeAction" class="myToolWindow.Actions.ExpandTreeAction" text="Expand All"/>
+        <action id="myToolWindow.Actions.CollapseTreeAction" class="myToolWindow.Actions.CollapseTreeAction" text="Collapse All"/>
     </actions>
 </idea-plugin>

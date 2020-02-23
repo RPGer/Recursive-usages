@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public class FindUsagesAction extends AnAction {
     public MyToolWindow mtw;
 
+    @SuppressWarnings("unused")
     public FindUsagesAction() {
     }
 
