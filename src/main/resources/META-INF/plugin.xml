@@ -2,7 +2,7 @@
     <id>org.endpointdeps.EndpointDependencies</id>
     <name>Recursive usages</name>
     <vendor email="timur.mukhatov@gmail.com" url="https://www.linkedin.com/in/timur-mukhatov/">Timur Mukhatov</vendor>
-    <version>1.1</version>
+    <version>1.2</version>
 
     <!-- TreeUtil.getUserObject available since 172.1909.2 -->
     <idea-version since-build="172.1909.2" />
