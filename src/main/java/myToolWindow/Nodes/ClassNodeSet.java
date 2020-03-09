@@ -18,6 +18,10 @@ public class ClassNodeSet {
         return false;
     }
 
+    public int size() {
+        return set.size();
+    }
+
     @Nullable
     public ClassNode find(MethodImpl methodImpl) {
         for (ClassNode classNode : set) {

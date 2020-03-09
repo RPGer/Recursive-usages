@@ -6,16 +6,16 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import myToolWindow.MyToolWindow;
 import org.jetbrains.annotations.NotNull;
 
-public class CollapseTreeAction extends AnAction {
+public class StopFindUsagesAction extends AnAction {
     public MyToolWindow mtw;
-    private boolean enabled = true;
+    private boolean enabled = false;
 
     @SuppressWarnings("unused")
-    public CollapseTreeAction() {
+    public StopFindUsagesAction() {
     }
 
-    public CollapseTreeAction(MyToolWindow tw) {
-        super("Collapse All", "Collapse all", AllIcons.Actions.Collapseall);
+    public StopFindUsagesAction(MyToolWindow tw) {
+        super("Stop Building A Tree Of Usages", "Stop building a tree of usages", AllIcons.Actions.Suspend);
         mtw = tw;
     }
 
@@ -31,10 +31,6 @@ public class CollapseTreeAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        if (mtw.tree != null) {
-            for (int i = mtw.tree.getRowCount() - 1; i >= 0 ; i--) {
-                mtw.tree.collapseRow(i);
-            }
-        }
+        mtw.stop();
     }
 }

@@ -15,14 +15,25 @@ import org.jetbrains.annotations.NotNull;
 
 public class FindUsagesAction extends AnAction {
     public MyToolWindow mtw;
+    private boolean enabled = true;
 
     @SuppressWarnings("unused")
     public FindUsagesAction() {
     }
 
     public FindUsagesAction(MyToolWindow tw) {
-        super("Find Recursive Usages", "Find recursive usages", AllIcons.RunConfigurations.TestState.Run);
+        super("Build A Tree Of Usages", "Build a tree of usages", AllIcons.RunConfigurations.TestState.Run);
         mtw = tw;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    @Override
+    public void update(@NotNull AnActionEvent e) {
+        e.getPresentation().setEnabled(enabled);
+        super.update(e);
     }
 
     @Override

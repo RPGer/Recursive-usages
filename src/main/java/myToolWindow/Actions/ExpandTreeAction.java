@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ExpandTreeAction extends AnAction {
     public MyToolWindow mtw;
+    private boolean enabled = true;
 
     @SuppressWarnings("unused")
     public ExpandTreeAction() {
@@ -16,6 +17,16 @@ public class ExpandTreeAction extends AnAction {
     public ExpandTreeAction(MyToolWindow tw) {
         super("Expand All", "Expand all", AllIcons.Actions.Expandall);
         mtw = tw;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    @Override
+    public void update(@NotNull AnActionEvent e) {
+        e.getPresentation().setEnabled(enabled);
+        super.update(e);
     }
 
     @Override

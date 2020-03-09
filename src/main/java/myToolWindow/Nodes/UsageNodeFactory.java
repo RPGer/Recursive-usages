@@ -17,7 +17,6 @@ import myToolWindow.Nodes.Icons.ClassNodes.RouteNode;
 import myToolWindow.Nodes.Icons.ClassNodes.TestNode;
 import myToolWindow.Nodes.Icons.FileNodes.PhpFileNode;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,13 +25,11 @@ import static com.intellij.testIntegration.TestFinderHelper.isTest;
 
 public class UsageNodeFactory {
 
-    @NotNull
     @Contract("_ -> new")
     public static UsageNode createFileNode(MethodReferenceImpl ref) {
         return new FileNode(new PhpFileNode(), ref);
     }
 
-    @NotNull
     @Contract("_ -> new")
     public static UsageNode createMethodNode(MethodImpl mel) {
         if (isRoute(mel)) {
@@ -47,7 +44,7 @@ public class UsageNodeFactory {
         return isSymfonyRouteDefinedByAnnotation(mel) || isLaravelRoute(mel);
     }
 
-    private static boolean isSymfonyRouteDefinedByAnnotation(@NotNull MethodImpl mel) {
+    private static boolean isSymfonyRouteDefinedByAnnotation(MethodImpl mel) {
         PsiElement[] annotations = mel.getNode().getTreePrev().getTreePrev().getPsi().getChildren();
         for (PsiElement annotation : annotations) {
             if (annotation instanceof PhpDocTagImpl && ((PhpDocTagImpl) annotation).getName().equals("@Route")) {

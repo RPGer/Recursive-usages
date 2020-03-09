@@ -1,4 +1,4 @@
-# Recursive usages
+# Tree of usages (Recursive usages)
 
 This plugin helps to find recursively all usages of given function. It creates a tree of usages whose nodes are methods, endpoints or tests.
 By changing a function you can see what other functions, endpoints or tests it will affect.

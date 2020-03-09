@@ -1,11 +1,10 @@
 <idea-plugin>
     <id>org.endpointdeps.EndpointDependencies</id>
-    <name>Recursive usages</name>
+    <name>Tree Of Usages</name>
     <vendor email="timur.mukhatov@gmail.com" url="https://www.linkedin.com/in/timur-mukhatov/">Timur Mukhatov</vendor>
-    <version>1.2</version>
+    <version>1.3</version>
 
-    <!-- TreeUtil.getUserObject available since 172.1909.2 -->
-    <idea-version since-build="172.1909.2" />
+    <idea-version since-build="162.1889" />
 
     <description><![CDATA[
     Replaced by description.html ...............................................
@@ -23,11 +22,12 @@
     <depends>com.jetbrains.php</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="Recursive usages" icon="AllIcons.Actions.Refresh" anchor="right" factoryClass="myToolWindow.MyToolWindowFactory"/>
+        <toolWindow id="Tree Of Usages" icon="AllIcons.Actions.Refresh" anchor="right" factoryClass="myToolWindow.MyToolWindowFactory"/>
     </extensions>
 
     <actions>
-        <action id="myToolWindow.Actions.FindUsagesAction" class="myToolWindow.Actions.FindUsagesAction" text="Find Usages"/>
+        <action id="myToolWindow.Actions.FindUsagesAction" class="myToolWindow.Actions.FindUsagesAction" text="Build A Tree Of Usages"/>
+        <action id="myToolWindow.Actions.StopFindUsagesAction" class="myToolWindow.Actions.StopFindUsagesAction" text="Stop Building A Tree Of Usages"/>
         <action id="myToolWindow.Actions.ExpandTreeAction" class="myToolWindow.Actions.ExpandTreeAction" text="Expand All"/>
         <action id="myToolWindow.Actions.CollapseTreeAction" class="myToolWindow.Actions.CollapseTreeAction" text="Collapse All"/>
     </actions>
