@@ -2,6 +2,7 @@ package myToolWindow.Nodes;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.psi.NavigatablePsiElement;
+import com.intellij.psi.PsiInvalidElementAccessException;
 import com.intellij.ui.RowIcon;
 import com.jetbrains.php.lang.psi.elements.impl.MethodImpl;
 import myToolWindow.Nodes.Icons.HasIcon;
@@ -42,7 +43,7 @@ public class ClassNode implements UsageNode {
     }
 
     @Override
-    public String getAdditionalText() throws NullPointerException {
+    public String getAdditionalText() throws NullPointerException, PsiInvalidElementAccessException {
         return " ← " + getElement().getOriginalElement().getContainingFile().getName();
     }
 }

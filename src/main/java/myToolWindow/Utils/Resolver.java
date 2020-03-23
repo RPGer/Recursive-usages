@@ -1,6 +1,7 @@
 package myToolWindow.Utils;
 
 import com.intellij.openapi.progress.ProcessCanceledException;
+import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveResult;
 import com.jetbrains.php.lang.psi.elements.Method;
@@ -16,7 +17,7 @@ import java.util.Set;
 
 public class Resolver {
     @Nullable
-    static public PsiElement resolveReference(@NotNull MethodReference methodReference) {
+    static public PsiElement resolveReference(@NotNull MethodReference methodReference, ProgressIndicator indicator) {
         PsiElement result = null;
         try {
             final ResolveResult[] resolved = methodReference.multiResolve(false);
@@ -28,6 +29,7 @@ public class Resolver {
                     // case: multiple options; get rid of duplicates and narrow to the "lowest" child
                     final Map<String, Method> methods = new LinkedHashMap<>();
                     for (final ResolveResult value : resolved) {
+                        indicator.checkCanceled();
                         final PsiElement element = value.getElement();
                         if (element instanceof Method) {
                             methods.put(((Method) element).getFQN(), (Method) element);
@@ -40,6 +42,7 @@ public class Resolver {
                         // try narrowing down to a child class
                         final Set<String> remaining = new HashSet<>(methods.keySet());
                         for (final Method method : methods.values()) {
+                            indicator.checkCanceled();
                             if (remaining.contains(method.getFQN())) {
                                 final PhpClass phpClass = method.getContainingClass();
                                 if (phpClass != null) {

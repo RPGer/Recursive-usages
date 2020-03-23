@@ -1,8 +1,9 @@
 package myToolWindow.Utils;
 
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
+import com.intellij.openapi.progress.util.ProgressIndicatorUtils;
 import com.intellij.openapi.project.Project;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.NavigatablePsiElement;
@@ -23,6 +24,7 @@ import myToolWindow.Nodes.ClassNode;
 import myToolWindow.Nodes.ClassNodeSet;
 import myToolWindow.Nodes.UsageNode;
 import myToolWindow.Nodes.UsageNodeFactory;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -35,29 +37,43 @@ public class TreeGenerator extends Task.Backgroundable {
     private final TreeRenderer renderer;
     private final MethodImpl element;
     private final MyToolWindow mtw;
+    private ProgressIndicator indicator;
 
     public TreeGenerator(MyToolWindow tw, @Nullable Project project, MethodImpl e) {
-        super(project, "Generating Tree Of Usages", true);
+        super(project, "Generating Tree Of Usages", false);
         mtw = tw;
         renderer = new TreeRenderer();
         element = e;
     }
 
-    public void run(ProgressIndicator indicator) {
+    public void run(@NotNull ProgressIndicator progressIndicator) {
+        indicator = progressIndicator;
         indicator.setFraction(0.0);
 
-        ApplicationManager.getApplication().runReadAction(() -> {
-            Tree tree = generateUsageTree(element);
-
-            mtw.finishCreatingTree(tree);
-        });
+        while (!ProgressIndicatorUtils.runInReadActionWithWriteActionPriority(this::process)) {
+            ProgressIndicatorUtils.yieldToPendingWriteActions();
+        }
 
         indicator.setFraction(1.0);
     }
 
-    public Tree generateUsageTree(MethodImpl element) {
+    private void process() {
+        try {
+            Tree tree = generateUsageTree(element);
+
+            mtw.finishCreatingTree(tree);
+        } catch (ProcessCanceledException e) {
+            if (mtw.forcedCancel) {
+                mtw.forcedCancel = false;
+            } else {
+                throw e;
+            }
+        }
+    }
+
+    private Tree generateUsageTree(MethodImpl element) throws ProcessCanceledException {
         classNodeSet.clear();
-        ClassNode classNode = (ClassNode) UsageNodeFactory.createMethodNode(element);
+        ClassNode classNode = (ClassNode) UsageNodeFactory.createMethodNode(element, indicator);
         classNodeSet.add(classNode);
         DefaultMutableTreeNode topElement = new DefaultMutableTreeNode(classNode);
 
@@ -66,12 +82,13 @@ public class TreeGenerator extends Task.Backgroundable {
         return configureTree(usageTree);
     }
 
-    private DefaultMutableTreeNode recursiveGenerator(MethodImpl element, DefaultMutableTreeNode root) {
+    private DefaultMutableTreeNode recursiveGenerator(MethodImpl element, DefaultMutableTreeNode root) throws ProcessCanceledException {
         Query<PsiReference> query = ReferencesSearch.search(element);
         // I'm using set in this place to get references to unique methods
         HashSet<PhpPsiElement> set = new HashSet<>();
 
         for (PsiReference psiReference : query) {
+            indicator.checkCanceled();
             PsiElement el = psiReference.getElement();
             PsiFile file = el.getContainingFile();
             final int offset = el.getTextOffset();
@@ -86,7 +103,7 @@ public class TreeGenerator extends Task.Backgroundable {
                 if (methodReferenceImpl != null) {
                     set.add(methodReferenceImpl);
                 } else {
-                    if (el instanceof PhpDocRefImpl){
+                    if (el instanceof PhpDocRefImpl) {
 
                     } else {
                         System.out.println("Not recognized element");
@@ -96,10 +113,11 @@ public class TreeGenerator extends Task.Backgroundable {
         }
 
         for (PhpPsiElement setElement : set) {
+            indicator.checkCanceled();
             if (setElement instanceof MethodImpl) {
                 MethodImpl methodImpl = (MethodImpl) setElement;
                 if (!classNodeSet.contains(methodImpl)) {
-                    ClassNode caller = (ClassNode) UsageNodeFactory.createMethodNode(methodImpl);
+                    ClassNode caller = (ClassNode) UsageNodeFactory.createMethodNode(methodImpl, indicator);
                     DefaultMutableTreeNode callerNode = new DefaultMutableTreeNode(caller);
 
                     root.add(callerNode);

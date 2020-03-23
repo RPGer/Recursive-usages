@@ -1,5 +1,6 @@
 package myToolWindow.Nodes;
 
+import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
@@ -30,18 +31,18 @@ public class UsageNodeFactory {
         return new FileNode(new PhpFileNode(), ref);
     }
 
-    @Contract("_ -> new")
-    public static UsageNode createMethodNode(MethodImpl mel) {
-        if (isRoute(mel)) {
-            return new ClassNode(new RouteNode(), mel);
-        } else if (isTest(mel)) {
+    @Contract("_, _ -> new")
+    public static UsageNode createMethodNode(MethodImpl mel, ProgressIndicator indicator) {
+        if (isTest(mel)) {
             return new ClassNode(new TestNode(), mel);
+        } else if (isRoute(mel, indicator)) {
+            return new ClassNode(new RouteNode(), mel);
         }
         return new ClassNode(new MethodNode(), mel);
     }
 
-    private static boolean isRoute(MethodImpl mel) {
-        return isSymfonyRouteDefinedByAnnotation(mel) || isLaravelRoute(mel);
+    private static boolean isRoute(MethodImpl mel, ProgressIndicator indicator) {
+        return isSymfonyRouteDefinedByAnnotation(mel) || isLaravelRoute(mel, indicator);
     }
 
     private static boolean isSymfonyRouteDefinedByAnnotation(MethodImpl mel) {
@@ -55,10 +56,12 @@ public class UsageNodeFactory {
         return false;
     }
 
-    private static boolean isLaravelRoute(MethodImpl element) {
+    // Takes a lot of time
+    private static boolean isLaravelRoute(MethodImpl element, ProgressIndicator indicator) {
         Query<PsiReference> q = ReferencesSearch.search(element);
 
         for (PsiReference r : q) {
+            indicator.checkCanceled();
             PsiElement el = r.getElement();
             PsiFile file = el.getContainingFile();
             final int offset = el.getTextOffset();
@@ -66,7 +69,7 @@ public class UsageNodeFactory {
             MethodReferenceImpl mel = PsiTreeUtil.findElementOfClassAtOffset(file, offset, MethodReferenceImpl.class, false);
 
             if (mel != null) {
-                PsiElement resolved = Resolver.resolveReference(mel);
+                PsiElement resolved = Resolver.resolveReference(mel, indicator);
 
                 if (resolved instanceof Method) {
                     final PhpClass phpClass = ((Method) resolved).getContainingClass();

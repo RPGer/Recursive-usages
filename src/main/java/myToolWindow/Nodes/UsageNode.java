@@ -1,6 +1,7 @@
 package myToolWindow.Nodes;
 
 import com.intellij.psi.NavigatablePsiElement;
+import com.intellij.psi.PsiInvalidElementAccessException;
 import myToolWindow.Nodes.Icons.HasIcon;
 
 public interface UsageNode extends HasIcon {
@@ -8,5 +9,5 @@ public interface UsageNode extends HasIcon {
 
     String getMainText() throws NullPointerException;
 
-    String getAdditionalText() throws NullPointerException;
+    String getAdditionalText() throws NullPointerException, PsiInvalidElementAccessException;
 }

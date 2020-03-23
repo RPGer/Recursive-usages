@@ -31,6 +31,7 @@ public class MyToolWindow {
     public Tree tree;
     private JBScrollPane treeView;
     private BackgroundableProcessIndicator progressIndicator;
+    public boolean forcedCancel = false;
     // Actions
     private final FindUsagesAction findUsagesAction = new FindUsagesAction(this);
     private final StopFindUsagesAction stopFindUsagesAction = new StopFindUsagesAction(this);
@@ -107,6 +108,7 @@ public class MyToolWindow {
     public void stop() {
         tree = null;
         treeView.removeAll();
+        forcedCancel = true;
         progressIndicator.cancel();
         setLoading(false);
     }

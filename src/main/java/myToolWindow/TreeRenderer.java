@@ -1,6 +1,7 @@
 package myToolWindow;
 
 import com.intellij.ide.util.treeView.NodeRenderer;
+import com.intellij.psi.PsiInvalidElementAccessException;
 import com.intellij.ui.SimpleTextAttributes;
 import myToolWindow.Nodes.UsageNode;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +21,7 @@ public class TreeRenderer extends NodeRenderer {
             try {
                 append(node.getMainText(), SimpleTextAttributes.REGULAR_ATTRIBUTES, true);
                 append(node.getAdditionalText(), SimpleTextAttributes.GRAYED_ATTRIBUTES, false);
-            } catch (NullPointerException e) {
+            } catch (NullPointerException | PsiInvalidElementAccessException e) {
                 append("Error", SimpleTextAttributes.ERROR_ATTRIBUTES);
             }
         }

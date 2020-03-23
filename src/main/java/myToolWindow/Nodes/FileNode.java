@@ -42,7 +42,7 @@ public class FileNode implements UsageNode {
     }
 
     @Override
-    public String getAdditionalText() throws NullPointerException {
+    public String getAdditionalText() {
         return "";
     }
 }
